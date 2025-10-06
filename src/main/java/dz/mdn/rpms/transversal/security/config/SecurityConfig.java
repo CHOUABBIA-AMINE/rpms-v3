@@ -57,8 +57,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/smsAPI/auth/**").permitAll()
                     .requestMatchers("/smsAPI/public/**").permitAll()
-                    .requestMatchers("/smsAPI/**").permitAll()
-                    .anyRequest().permitAll())//.authenticated())
+                    //.requestMatchers("/smsAPI/**").permitAll()
+                    .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
 
