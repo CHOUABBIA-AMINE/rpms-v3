@@ -1,6 +1,6 @@
 /**
  *	
- *	@author		: MEDJERAB ABIR
+ *	@author		: CHOUABBIA Mohammed El Amine
  *
  *	@Name		: User
  *	@CreatedOn	: 26-06-2025
@@ -123,12 +123,10 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
         
-        // Add roles
         for (Role role : roles) {
             authorities.addAll(role.getAuthorities());
         }
         
-        // Add groups and their roles
         for (Group group : groups) {
             for (Role groupRole : group.getRoles()) {
                 authorities.addAll(groupRole.getAuthorities());
