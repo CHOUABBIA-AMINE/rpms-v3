@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret'"
+  },
+  {
+    "name": "jwt.refresh.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.refresh.expiration'"
+  },
+  {
+    "name": "rate.limit.capacity",
+    "type": "java.lang.String",
+    "description": "A description for 'rate.limit.capacity'"
+  },
+  {
+    "name": "rate.limit.time.minutes",
+    "type": "java.lang.String",
+    "description": "A description for 'rate.limit.time.minutes'"
+  },
+  {
+    "name": "jwt.access.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.access.expiration'"
+  }
+]}
