@@ -32,6 +32,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -39,6 +40,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +51,9 @@ import lombok.Setter;
 		uniqueConstraints = {
 			@UniqueConstraint(name="T_01_05_UK_01", columnNames = "F_01"),
 			@UniqueConstraint(name="T_01_05_UK_02", columnNames = "F_02")
+		}, indexes = {
+		    @Index(name = "T_01_05_IDX_01", columnList = "F_01"),
+		    @Index(name = "T_01_05_IDX_02", columnList = "F_02")
 		})
 @Getter
 @Setter
@@ -71,19 +76,23 @@ public class User implements UserDetails {
     private Long version;
 
 	@Id
+	@NotBlank
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="F_00", nullable = false, unique = true)
     private Long id;
 
-	@Column(name="F_01", nullable = false, length = 30)
+	@NotBlank
+    @Column(name="F_01", nullable = false, length = 30)
     private String username;
 
-    @Email
-	@Column(name="F_02", nullable = false, length = 100)
+	@NotBlank
+	@Email(message = "Valid email required")
+    @Column(name="F_02", nullable = false, unique = true, length = 100)
     private String email;
 
     @JsonIgnore
-    @Column(name="F_03", nullable = false, length = 120)
+    @NotBlank
+	@Column(name="F_03", nullable = false, length = 120)
     private String password;
 
     @Column(name="F_04")

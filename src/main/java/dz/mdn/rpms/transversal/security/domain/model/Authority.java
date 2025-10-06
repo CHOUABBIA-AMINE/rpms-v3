@@ -26,16 +26,24 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "T_01_02")
+@Table( name = "T_01_02", 
+		uniqueConstraints = {
+			@UniqueConstraint(name="T_01_02_UK_01", columnNames = "F_01")
+		}, indexes = {
+		    @Index(name = "T_01_02_IDX_01", columnList = "F_01")
+		})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -55,11 +63,13 @@ public class Authority {
     private Long version;
 	
     @Id
+    @NotBlank
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="F_00", nullable = false, unique = true)
     private Long id;
 
-	@Column(name="F_01", nullable = false, length = 50)
+    @NotBlank
+    @Column(name="F_01", nullable = false, length = 50)
     private String name;
 
 	@Column(name="F_02", nullable = true, length = 200)
