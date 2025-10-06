@@ -32,18 +32,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
 @Table(name = "T_02_01", indexes = {
     @Index(name = "idx_f_01", 		columnList = "F_01"),
     @Index(name = "idx_f_07", 		columnList = "F_07"),
     @Index(name = "idx_f_08", 		columnList = "F_08")
 })
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class AuditEntry {
+public class Log {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

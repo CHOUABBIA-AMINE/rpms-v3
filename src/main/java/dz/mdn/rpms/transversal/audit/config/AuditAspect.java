@@ -23,21 +23,21 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import dz.mdn.rpms.transversal.audit.service.AuditService;
+import dz.mdn.rpms.transversal.audit.service.LogService;
 import lombok.RequiredArgsConstructor;
 
 @Aspect
 @Component
 @RequiredArgsConstructor
 public class AuditAspect {
-    private final AuditService auditService;
+    private final LogService logService;
 
     @AfterReturning(
         pointcut = "@annotation(auditable)",
         returning = "result")
     public void auditSuccessfulOperation(JoinPoint joinPoint, Auditable auditable, Object result) {
         Object resourceId = extractResourceId(result, auditable.idField());
-        auditService.logEvent(
+        logService.logEvent(
             auditable.action(),
             auditable.resourceType(),
             resourceId != null ? Long.parseLong(resourceId.toString()) : null,
@@ -48,7 +48,7 @@ public class AuditAspect {
         pointcut = "@annotation(auditable)",
         throwing = "ex")
     public void auditFailedOperation(JoinPoint joinPoint, Auditable auditable, Exception ex) {
-        auditService.logEvent(
+    	logService.logEvent(
             auditable.action() + "_FAILED",
             auditable.resourceType(),
             null,

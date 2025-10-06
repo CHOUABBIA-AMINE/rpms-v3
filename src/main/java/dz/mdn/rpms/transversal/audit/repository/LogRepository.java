@@ -22,23 +22,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import dz.mdn.rpms.transversal.audit.domain.model.AuditEntry;
+import dz.mdn.rpms.transversal.audit.domain.model.Log;
 
-public interface AuditRepository extends JpaRepository<AuditEntry, Long> {
+public interface LogRepository extends JpaRepository<Log, Long> {
 
     // Basic filtered queries
-    Page<AuditEntry> findByAction(String action, Pageable pageable);
-    Page<AuditEntry> findByResourceType(String resourceType, Pageable pageable);
-    Page<AuditEntry> findByPerformedBy(String username, Pageable pageable);
+    Page<Log> findByAction(String action, Pageable pageable);
+    Page<Log> findByResourceType(String resourceType, Pageable pageable);
+    Page<Log> findByPerformedBy(String username, Pageable pageable);
 
     // Time-based queries
-    Page<AuditEntry> findByActionTimeBetween(Instant start, Instant end, Pageable pageable);
-    List<AuditEntry> findByActionTimeAfter(Instant start);
-    List<AuditEntry> findByActionTimeBefore(Instant end);
+    Page<Log> findByActionTimeBetween(Instant start, Instant end, Pageable pageable);
+    List<Log> findByActionTimeAfter(Instant start);
+    List<Log> findByActionTimeBefore(Instant end);
 
     // Combined filters
-    Page<AuditEntry> findByActionAndResourceType(String action, String resourceType, Pageable pageable);
-    Page<AuditEntry> findByPerformedByAndActionTimeBetween(
+    Page<Log> findByActionAndResourceType(String action, String resourceType, Pageable pageable);
+    Page<Log> findByPerformedByAndActionTimeBetween(
         String username, 
         Instant start, 
         Instant end, 
@@ -46,7 +46,7 @@ public interface AuditRepository extends JpaRepository<AuditEntry, Long> {
 
     // Full-text search on request details (JSON content)
     @Query("SELECT a FROM AuditEntry a WHERE a.requestDetails LIKE %:searchTerm%")
-    Page<AuditEntry> searchInRequestDetails(@Param("searchTerm") String searchTerm, Pageable pageable);
+    Page<Log> searchInRequestDetails(@Param("searchTerm") String searchTerm, Pageable pageable);
 
     // Native query for complex JSON searching (PostgreSQL example)
     @Query(value = """
@@ -54,7 +54,7 @@ public interface AuditRepository extends JpaRepository<AuditEntry, Long> {
         WHERE request_details::text LIKE %:searchTerm%
         AND actionTime BETWEEN :start AND :end
         """, nativeQuery = true)
-    Page<AuditEntry> advancedSearch(
+    Page<Log> advancedSearch(
         @Param("searchTerm") String searchTerm,
         @Param("start") Instant start,
         @Param("end") Instant end,
@@ -79,5 +79,5 @@ public interface AuditRepository extends JpaRepository<AuditEntry, Long> {
     List<Object[]> getDailyAuditStats(@Param("start") Instant start, @Param("end") Instant end);
 
     // Find by resource ID (supports multiple resource types)
-    Page<AuditEntry> findByResourceTypeAndResourceId(String resourceType, Long resourceId, Pageable pageable);
+    Page<Log> findByResourceTypeAndResourceId(String resourceType, Long resourceId, Pageable pageable);
 }

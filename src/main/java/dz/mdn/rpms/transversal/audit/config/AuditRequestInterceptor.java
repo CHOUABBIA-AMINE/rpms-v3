@@ -33,7 +33,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
-import dz.mdn.rpms.transversal.audit.service.AuditService;
+import dz.mdn.rpms.transversal.audit.service.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ public class AuditRequestInterceptor implements HandlerInterceptor {
         "application/octet-stream"
     );
     
-    private final AuditService auditService;
+    private final LogService logService;
     private final Map<String, Long> requestTimestamps = new ConcurrentHashMap<>();
 
     @Override
@@ -79,7 +79,7 @@ public class AuditRequestInterceptor implements HandlerInterceptor {
         try {
             long duration = System.currentTimeMillis() - requestTimestamps.remove(requestId);
             Map<String, Object> auditData = buildAuditData(request, response, ex, duration);
-            auditService.logHttpRequest(ex == null ? "REQUEST_COMPLETED" : "REQUEST_FAILED", auditData);
+            logService.logHttpRequest(ex == null ? "REQUEST_COMPLETED" : "REQUEST_FAILED", auditData);
         } catch (Exception e) {
             log.error("Failed to audit request", e);
         } finally {

@@ -28,8 +28,8 @@ import org.springframework.util.StopWatch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dz.mdn.rpms.transversal.audit.domain.model.AuditEntry;
-import dz.mdn.rpms.transversal.audit.repository.AuditRepository;
+import dz.mdn.rpms.transversal.audit.domain.model.Log;
+import dz.mdn.rpms.transversal.audit.repository.LogRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuditService {
-    private final AuditRepository auditRepository;
+public class LogService {
+    private final LogRepository logRepository;
     private final HttpServletRequest request;
     private final ObjectMapper objectMapper;
     
@@ -59,8 +59,8 @@ public class AuditService {
     @Async
     public void logEvent(String action, String resourceType, Long resourceId, Object requestDetails) {
         try {
-            AuditEntry entry = buildAuditEntry(action, resourceType, resourceId, requestDetails);
-            auditRepository.save(entry);
+            Log entry = buildAuditEntry(action, resourceType, resourceId, requestDetails);
+            logRepository.save(entry);
             log.debug("Audit log saved: {}", entry);
         } catch (Exception e) {
             log.error("Failed to save audit entry", e);
@@ -70,8 +70,8 @@ public class AuditService {
     @Async
     public void logHttpRequest(String action, Map<String, Object> requestData) {
         try {
-            AuditEntry entry = buildHttpAuditEntry(action, requestData);
-            auditRepository.save(entry);
+        	Log entry = buildHttpAuditEntry(action, requestData);
+        	logRepository.save(entry);
         } catch (Exception e) {
             log.error("Failed to save HTTP audit entry", e);
         }
@@ -95,9 +95,9 @@ public class AuditService {
         }
     }
 
-    private AuditEntry buildAuditEntry(String action, String resourceType, 
+    private Log buildAuditEntry(String action, String resourceType, 
                                      Long resourceId, Object details) {
-        return AuditEntry.builder()
+        return Log.builder()
             .action(action)
             .resourceType(resourceType)
             .resourceId(resourceId)
@@ -111,8 +111,8 @@ public class AuditService {
             .build();
     }
 
-    private AuditEntry buildHttpAuditEntry(String action, Map<String, Object> requestData) {
-        return AuditEntry.builder()
+    private Log buildHttpAuditEntry(String action, Map<String, Object> requestData) {
+        return Log.builder()
             .action(action)
             .resourceType("HTTP_REQUEST")
             .requestDetails(maskSensitiveData(serialize(requestData)))
@@ -195,9 +195,9 @@ public class AuditService {
 
     // Batch insert for high-volume systems
     @Async
-    public void bulkInsert(List<AuditEntry> entries) {
+    public void bulkInsert(List<Log> entries) {
         try {
-            auditRepository.saveAll(entries);
+            logRepository.saveAll(entries);
         } catch (Exception e) {
             log.error("Failed to bulk insert audit entries", e);
         }
@@ -206,7 +206,7 @@ public class AuditService {
     // Cleanup old audit logs
     public void cleanupOldEntries(Instant cutoffDate) {
         try {
-            auditRepository.deleteByActionTimeBefore(cutoffDate);
+        	logRepository.deleteByActionTimeBefore(cutoffDate);
         } catch (Exception e) {
             log.error("Failed to cleanup old audit entries", e);
         }

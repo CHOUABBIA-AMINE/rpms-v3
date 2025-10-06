@@ -13,10 +13,13 @@
 
 package dz.mdn.rpms.transversal.security.domain.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -31,14 +34,31 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "T_01_03")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role {
+
+	@CreationTimestamp
+    @Column(name = "A_01", nullable = false, updatable = false)
+    private Date createdAt;
+
+	@UpdateTimestamp
+    @Column(name = "A_02", nullable = true, updatable = true)
+    private Date updatedAt;
+
+    @Version
+    @Column(name = "A_03")
+    private Long version;
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
