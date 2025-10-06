@@ -107,13 +107,13 @@ public class User implements UserDetails {
     @Column(name="F_07")
     private boolean enabled = true;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "R_01_05__01_03",
             joinColumns = @JoinColumn(name = "F_01", foreignKey=@ForeignKey(name="R_01_05__01_03_FK_01")),
             inverseJoinColumns = @JoinColumn(name = "F_02", foreignKey=@ForeignKey(name="R_01_05__01_03_FK_02")))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "R_01_05__01_04",
             joinColumns = @JoinColumn(name = "F_01", foreignKey=@ForeignKey(name="R_01_05__01_04_FK_01")),
             inverseJoinColumns = @JoinColumn(name = "F_02", foreignKey=@ForeignKey(name="R_01_05__01_04_FK_02")))

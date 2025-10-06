@@ -78,7 +78,7 @@ public class Group {
     @Column(name="F_02", nullable = true, length = 200)
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "R_01_04__01_03",
             joinColumns = @JoinColumn(name = "F_01", foreignKey=@ForeignKey(name="R_01_04__01_03_FK_01")),
             inverseJoinColumns = @JoinColumn(name = "F_02", foreignKey=@ForeignKey(name="R_01_04__01_03_FK_02")))

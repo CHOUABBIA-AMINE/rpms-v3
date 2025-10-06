@@ -78,7 +78,7 @@ public class Permission {
     @Column(name="F_02", nullable = true, length = 200)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="F_03", foreignKey=@ForeignKey(name="T_01_01_FK_01"))
     private Authority authority;
     

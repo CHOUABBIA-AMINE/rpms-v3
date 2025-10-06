@@ -80,7 +80,7 @@ public class Role {
     @Column(name="F_02", nullable = true, length = 200)
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "R_01_03__01_01",
             joinColumns = @JoinColumn(name = "F_01", foreignKey=@ForeignKey(name="R_01_03_01_01_FK_01")),
             inverseJoinColumns = @JoinColumn(name = "F_02", foreignKey=@ForeignKey(name="R_01_03_01_01_FK_02")))
